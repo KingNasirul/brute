@@ -5,18 +5,14 @@
 # BruteForce
 bruteforce attack on facebook account script in python
 
-## Install Requirements(Linux)
-```
-apt-get install git python3 python3-pip python python-pip
 ```
 
 ## Run commands one by one
 ```
 git clone https://github.com/toxicshark/brute
 cd brute
-pip3 install requests bs4
 pip install mechanize
-python3 brute.py or python brute.py
+python2 brute.py
 ```
 
 ## Protection Against Attacker
