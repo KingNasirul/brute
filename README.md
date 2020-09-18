@@ -1,6 +1,6 @@
 ## Author: github.com/toxicshark
 ## Facebook: www.facebook.com/HaxorToxicShark
-### Don't copy this code without give me the credits!
+### Don't copy this code without my credits!
 
 # BruteForce
 bruteforce attack on facebook account script in python
