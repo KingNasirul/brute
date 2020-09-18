@@ -66,9 +66,9 @@ def welcome():
         +=========================================+
         |..........   Facebook Crack   ...........|
         +-----------------------------------------+
-        |            #Author: Toxic Shark              | 
+        |            #Author: Toxic Shark         | 
         |	       Version 1.0                |
- 	|   https://www.facebook.com/HaxorToxicShark      |
+ 	|https://www.facebook.com/HaxorToxicShark |
         +=========================================+
         |..........  fb-brute  ...........|
         +-----------------------------------------+\n\n
