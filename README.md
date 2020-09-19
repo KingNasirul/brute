@@ -5,7 +5,6 @@
 # BruteForce
 bruteforce attack on facebook account script in python
 
-```
 
 ## Run commands one by one
 
@@ -16,6 +15,7 @@ cd brute
 pip install mechanize
 
 python2 brute.py
+
 ```
 
 ## Protection Against Attacker
